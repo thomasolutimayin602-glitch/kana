@@ -31,7 +31,8 @@
 
         <div class="kana-section-tabs" role="tablist" aria-label="五十音页面分区">
           <button class="section-tab is-active" type="button" data-kana-section="chart">五十音图</button>
-          <button class="section-tab" type="button" data-kana-section="flashcard">闪卡训练</button>
+          <button class="section-tab" type="button" data-kana-section="romaji-to-kana">听音选假名</button>
+          <button class="section-tab" type="button" data-kana-section="kana-to-romaji">看假名选音</button>
         </div>
 
         <div class="kana-sections">
@@ -39,40 +40,20 @@
             <div class="section-panel-head">
               <div>
                 <h2>五十音图</h2>
-                <p>平假名基础表。记忆阶段可以在这里查看，开始闪卡后本表会被隐藏。</p>
+                <p>包含清音、浊音/半浊音与拗音。开始训练后本表会被隐藏。</p>
               </div>
             </div>
 
-            <div class="chart-group-tabs" role="tablist" aria-label="字母表切换">
-              <button class="chart-group-tab is-active" type="button" data-chart-group="gojuon">清音</button>
-              <button class="chart-group-tab" type="button" data-chart-group="dakuon">浊音/半浊音</button>
-              <button class="chart-group-tab" type="button" data-chart-group="yoon">拗音</button>
-            </div>
-
-            <section class="kana-table" aria-label="五十音表">
-              <div id="kanaTable"></div>
-            </section>
+            <div id="kanaTable"></div>
           </section>
 
           <section class="practice-panel kana-flashcard-section is-hidden" id="flashcardSection" aria-label="五十音闪卡训练">
             <div class="answer-effect" id="answerEffect" aria-hidden="true"></div>
 
-            <div class="practice-group-tabs" role="tablist" aria-label="训练范围选择">
-              <button class="practice-group-tab is-active" type="button" data-practice-group="gojuon">清音</button>
-              <button class="practice-group-tab" type="button" data-practice-group="dakuon">浊音/半浊音</button>
-              <button class="practice-group-tab" type="button" data-practice-group="yoon">拗音</button>
-              <button class="practice-group-tab" type="button" data-practice-group="all-groups">全部</button>
-            </div>
-
             <div class="mode-tabs" role="tablist" aria-label="训练模式">
               <button class="mode-tab is-active" type="button" data-kana-mode="all">整体</button>
               <button class="mode-tab" type="button" data-kana-mode="row">按行</button>
               <button class="mode-tab" type="button" data-kana-mode="column">按列</button>
-            </div>
-
-            <div class="qtype-tabs" role="tablist" aria-label="题型切换">
-              <button class="qtype-tab is-active" type="button" data-kana-qtype="romaji-to-kana">听音选假名</button>
-              <button class="qtype-tab" type="button" data-kana-qtype="kana-to-romaji">看假名选罗马音</button>
             </div>
 
             <div class="filter-scroll is-hidden" id="filterScroll">

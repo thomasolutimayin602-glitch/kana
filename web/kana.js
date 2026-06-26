@@ -168,7 +168,7 @@ const state = {
   autoNext: false,
   qtype: "romaji-to-kana",
   chartGroup: "gojuon",
-  practiceGroup: "gojuon",
+  practiceGroup: "all-groups",
   stats: {
     answered: 0,
     correct: 0
@@ -196,10 +196,7 @@ const elements = {
   nextButton: document.getElementById("nextButton"),
   autoNextToggle: document.getElementById("autoNextToggle"),
   kanaTable: document.getElementById("kanaTable"),
-  modeTabs: Array.from(document.querySelectorAll(".mode-tab")),
-  qtypeTabs: Array.from(document.querySelectorAll(".qtype-tab")),
-  chartGroupTabs: Array.from(document.querySelectorAll(".chart-group-tab")),
-  practiceGroupTabs: Array.from(document.querySelectorAll(".practice-group-tab"))
+  modeTabs: Array.from(document.querySelectorAll(".mode-tab"))
 }
 
 const audio = new Audio()
@@ -341,7 +338,7 @@ function renderSections() {
     button.classList.toggle("is-active", button.dataset.kanaSection === state.section)
   })
   elements.chartSection.classList.toggle("is-hidden", state.section !== "chart")
-  elements.flashcardSection.classList.toggle("is-hidden", state.section !== "flashcard")
+  elements.flashcardSection.classList.toggle("is-hidden", state.section !== "romaji-to-kana" && state.section !== "kana-to-romaji")
 }
 
 function renderModeTabs() {
@@ -404,54 +401,46 @@ function renderAnswers() {
   })
 }
 
-function getActiveChartData() {
-  if (state.chartGroup === "dakuon") {
-    return {
-      rows: dakuonRows,
-      columns: dakuonColumns,
-      kanaList: dakuonKana
-    }
-  }
-  if (state.chartGroup === "yoon") {
-    return {
-      rows: yoonRows,
-      columns: yoonColumns,
-      kanaList: yoonKana
-    }
-  }
-  return {
-    rows: gojuonRows,
-    columns: gojuonColumns,
-    kanaList: gojuonKana
-  }
-}
+function renderSubTable(title, rows, columns, kanaList, index) {
+  const groupContainer = document.createElement("div")
+  groupContainer.className = "chart-group-container"
 
-function renderTable() {
-  elements.kanaTable.innerHTML = ""
+  const titleElement = document.createElement("h3")
+  titleElement.className = "chart-group-title"
+  titleElement.textContent = title
+  titleElement.style.margin = index === 0 ? "0 0 10px 0" : "24px 0 10px 0"
+  titleElement.style.fontSize = "16px"
+  titleElement.style.fontWeight = "700"
+  titleElement.style.color = "var(--accent)"
+  groupContainer.appendChild(titleElement)
 
-  const { rows: activeRows, columns: activeColumns, kanaList: activeKanaList } = getActiveChartData()
-  const colCount = activeColumns.length
+  const tableWrapper = document.createElement("div")
+  tableWrapper.className = "kana-table"
+  tableWrapper.style.marginTop = "0"
+
+  const colCount = columns.length
 
   const header = document.createElement("div")
   header.className = "table-row table-header"
   header.style.gridTemplateColumns = `68px repeat(${colCount}, minmax(42px, 1fr))`
+  
   const corner = document.createElement("span")
   corner.textContent = "播放"
   header.appendChild(corner)
 
-  activeColumns.forEach((column) => {
+  columns.forEach((column) => {
     const button = document.createElement("button")
     button.type = "button"
     button.className = "table-action table-column-action"
     button.textContent = displayColumnLabel(column)
     button.setAttribute("aria-label", `播放${displayColumnLabel(column)}`)
-    button.addEventListener("click", () => playColumn(column.id, activeColumns, activeKanaList))
+    button.addEventListener("click", () => playColumn(column.id, columns, kanaList))
     header.appendChild(button)
   })
 
-  elements.kanaTable.appendChild(header)
+  tableWrapper.appendChild(header)
 
-  activeRows.forEach((row) => {
+  rows.forEach((row) => {
     const rowElement = document.createElement("div")
     rowElement.className = "table-row"
     rowElement.style.gridTemplateColumns = `68px repeat(${colCount}, minmax(42px, 1fr))`
@@ -461,14 +450,14 @@ function renderTable() {
     rowButton.className = "table-action table-row-action"
     rowButton.textContent = displayRowLabel(row)
     rowButton.setAttribute("aria-label", `播放${displayRowLabel(row)}`)
-    rowButton.addEventListener("click", () => playRow(row.id, activeKanaList))
+    rowButton.addEventListener("click", () => playRow(row.id, kanaList))
     rowElement.appendChild(rowButton)
 
     row.kana.forEach((kana) => {
       const cellElement = document.createElement("button")
       cellElement.type = "button"
       cellElement.className = "kana-cell"
-      const kanaItem = activeKanaList.find((item) => item.kana === kana)
+      const kanaItem = kanaList.find((item) => item.kana === kana)
 
       if (kana && kanaItem) {
         cellElement.textContent = displayKana(kanaItem)
@@ -487,31 +476,24 @@ function renderTable() {
       rowElement.appendChild(cellElement)
     })
 
-    elements.kanaTable.appendChild(rowElement)
+    tableWrapper.appendChild(rowElement)
   })
+
+  groupContainer.appendChild(tableWrapper)
+  elements.kanaTable.appendChild(groupContainer)
+}
+
+function renderTable() {
+  elements.kanaTable.innerHTML = ""
+
+  renderSubTable("清音", gojuonRows, gojuonColumns, gojuonKana, 0)
+  renderSubTable("浊音 / 半浊音", dakuonRows, dakuonColumns, dakuonKana, 1)
+  renderSubTable("拗音", yoonRows, yoonColumns, yoonKana, 2)
 }
 
 function setFeedback(text, type = "") {
   elements.feedbackText.textContent = text
   elements.feedbackText.className = `feedback${type ? ` ${type}` : ""}`
-}
-
-function renderQtypeTabs() {
-  elements.qtypeTabs.forEach((button) => {
-    button.classList.toggle("is-active", button.dataset.kanaQtype === state.qtype)
-  })
-}
-
-function renderChartGroupTabs() {
-  elements.chartGroupTabs.forEach((button) => {
-    button.classList.toggle("is-active", button.dataset.chartGroup === state.chartGroup)
-  })
-}
-
-function renderPracticeGroupTabs() {
-  elements.practiceGroupTabs.forEach((button) => {
-    button.classList.toggle("is-active", button.dataset.practiceGroup === state.practiceGroup)
-  })
 }
 
 function renderCard() {
@@ -539,10 +521,19 @@ function renderCard() {
     modeTabsContainer.style.display = isAllGroups ? "none" : "grid"
   }
 
+  // Adjust play button visibility and prompt container layout based on question type
+  const promptContainer = document.querySelector(".prompt")
+  if (promptContainer) {
+    if (state.qtype === "kana-to-romaji") {
+      promptContainer.style.gridTemplateColumns = "1fr"
+      elements.playButton.style.display = "none"
+    } else {
+      promptContainer.style.gridTemplateColumns = ""
+      elements.playButton.style.display = ""
+    }
+  }
+
   renderModeTabs()
-  renderQtypeTabs()
-  renderChartGroupTabs()
-  renderPracticeGroupTabs()
   renderFilters()
   renderAnswers()
   renderTable()
@@ -776,6 +767,7 @@ function playColumn(columnId, activeColumns = gojuonColumns, activeKanaList = go
 
 function playCurrentAudio() {
   if (!state.current) return
+  if (state.qtype === "kana-to-romaji") return
 
   sequenceToken += 1
   playKanaAudio(state.current).catch(() => {
@@ -851,9 +843,14 @@ elements.sectionTabs.forEach((button) => {
     const nextSection = button.dataset.kanaSection
     if (nextSection === state.section) return
     state.section = nextSection
-    renderCard()
-    if (state.section === "flashcard") {
-      playCurrentAudio()
+    if (nextSection === "chart") {
+      renderCard()
+    } else {
+      state.qtype = nextSection
+      startSession()
+      if (state.qtype === "romaji-to-kana") {
+        playCurrentAudio()
+      }
     }
   })
 })
@@ -864,35 +861,6 @@ elements.modeTabs.forEach((button) => {
     if (nextMode === state.mode) return
     state.mode = nextMode
     state.activeFilter = getDefaultFilter(nextMode)
-    startSession()
-  })
-})
-
-elements.qtypeTabs.forEach((button) => {
-  button.addEventListener("click", () => {
-    const nextQtype = button.dataset.kanaQtype
-    if (nextQtype === state.qtype) return
-    state.qtype = nextQtype
-    startSession()
-  })
-})
-
-elements.chartGroupTabs.forEach((button) => {
-  button.addEventListener("click", () => {
-    const nextGroup = button.dataset.chartGroup
-    if (nextGroup === state.chartGroup) return
-    state.chartGroup = nextGroup
-    renderCard()
-  })
-})
-
-elements.practiceGroupTabs.forEach((button) => {
-  button.addEventListener("click", () => {
-    const nextGroup = button.dataset.practiceGroup
-    if (nextGroup === state.practiceGroup) return
-    state.practiceGroup = nextGroup
-    state.mode = "all"
-    state.activeFilter = ""
     startSession()
   })
 })
