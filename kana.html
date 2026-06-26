@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5efe4" />
+    <title>五十音闪卡 - 日本留学一站通</title>
+    <link rel="stylesheet" href="../study_abroad_portal/web/portal.css" />
+  </head>
+  <body>
+    <main class="shell kana-shell">
+      <section class="panel module-panel kana-page" aria-label="五十音与发音练习">
+        <div class="module-panel-head">
+          <div>
+            <p class="section-kicker">N4 Module</p>
+            <h1>五十音闪卡</h1>
+            <p>先查看五十音图，再进入闪卡训练。闪卡训练时会隐藏五十音图，避免直接看到答案。</p>
+          </div>
+          <div class="kana-top-actions">
+            <a class="ghost-action" href="../index.html">返回首页</a>
+            <div class="script-toggle" role="group" aria-label="假名显示切换">
+              <button class="script-button is-active" type="button" data-kana-script="hiragana">平假名</button>
+              <button class="script-button" type="button" data-kana-script="katakana">片假名</button>
+            </div>
+            <p class="cache-status" id="cacheStatus">音频缓存准备中...</p>
+            <div class="score-box" aria-label="答题统计">
+              <span id="correctCount">0</span>
+              <span id="answeredCount">/0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kana-section-tabs" role="tablist" aria-label="五十音页面分区">
+          <button class="section-tab is-active" type="button" data-kana-section="chart">五十音图</button>
+          <button class="section-tab" type="button" data-kana-section="flashcard">闪卡训练</button>
+        </div>
+
+        <div class="kana-sections">
+          <section class="kana-chart-section" id="chartSection" aria-label="五十音图">
+            <div class="section-panel-head">
+              <div>
+                <h2>五十音图</h2>
+                <p>平假名基础表。记忆阶段可以在这里查看，开始闪卡后本表会被隐藏。</p>
+              </div>
+            </div>
+
+            <section class="kana-table" aria-label="五十音表">
+              <div id="kanaTable"></div>
+            </section>
+          </section>
+
+          <section class="practice-panel kana-flashcard-section is-hidden" id="flashcardSection" aria-label="五十音闪卡训练">
+            <div class="answer-effect" id="answerEffect" aria-hidden="true"></div>
+
+            <div class="mode-tabs" role="tablist" aria-label="训练模式">
+              <button class="mode-tab is-active" type="button" data-kana-mode="all">整体</button>
+              <button class="mode-tab" type="button" data-kana-mode="row">按行</button>
+              <button class="mode-tab" type="button" data-kana-mode="column">按列</button>
+            </div>
+
+            <div class="filter-scroll is-hidden" id="filterScroll">
+              <div class="filter-track" id="filterTrack"></div>
+            </div>
+
+            <div class="card-head">
+              <span id="scopeLabel">整体训练</span>
+              <span id="progressText">1 / 46</span>
+            </div>
+
+            <label class="auto-next-toggle">
+              <input id="autoNextToggle" type="checkbox" />
+              <span>答对后 1 秒自动下一题</span>
+            </label>
+
+            <div class="prompt">
+              <div>
+                <span class="prompt-label">读音</span>
+                <span class="sound-mark" id="soundMark">?</span>
+              </div>
+              <button class="play-button" id="playButton" type="button" aria-label="播放读音">
+                <span aria-hidden="true">▶</span>
+              </button>
+            </div>
+
+            <div class="answer-grid" id="answerGrid"></div>
+
+            <p class="feedback" id="feedbackText">待作答</p>
+
+            <div class="actions">
+              <button class="secondary-button" id="resetButton" type="button">重练本组</button>
+              <button class="primary-button" id="nextButton" type="button" disabled>下一题</button>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <script src="web/kana.js"></script>
+  </body>
+</html>

@@ -1,0 +1,94 @@
+<view class="page">
+  <view class="topbar">
+    <view>
+      <text class="eyebrow">五十音</text>
+      <text class="title">听读音，选假名</text>
+    </view>
+    <view class="score">
+      <text class="score-main">{{stats.correct}}</text>
+      <text class="score-sub">/{{stats.answered}}</text>
+    </view>
+  </view>
+
+  <view class="mode-tabs" aria-label="训练模式">
+    <button
+      class="mode-tab {{mode === 'all' ? 'is-active' : ''}}"
+      data-mode="all"
+      bindtap="changeMode"
+    >整体</button>
+    <button
+      class="mode-tab {{mode === 'row' ? 'is-active' : ''}}"
+      data-mode="row"
+      bindtap="changeMode"
+    >按行</button>
+    <button
+      class="mode-tab {{mode === 'column' ? 'is-active' : ''}}"
+      data-mode="column"
+      bindtap="changeMode"
+    >按列</button>
+  </view>
+
+  <scroll-view wx:if="{{mode !== 'all'}}" class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="filter-track">
+      <button
+        wx:for="{{filters}}"
+        wx:key="id"
+        class="filter-chip {{activeFilter === item.id ? 'is-active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="changeFilter"
+      >{{item.label}}</button>
+    </view>
+  </scroll-view>
+
+  <view class="card">
+    <view class="card-head">
+      <text class="scope">{{scopeLabel}}</text>
+      <text class="progress">{{deckIndex + 1}} / {{deck.length}}</text>
+    </view>
+
+    <view class="prompt">
+      <text class="prompt-label">读音</text>
+      <text class="sound-mark">?</text>
+      <button class="audio-button" bindtap="playCurrentAudio" hover-class="is-pressing" aria-label="播放读音">
+        <text class="audio-icon">▶</text>
+      </button>
+    </view>
+
+    <view class="answer-grid">
+      <button
+        wx:for="{{options}}"
+        wx:key="kana"
+        class="answer {{answered && item.kana === current.kana ? 'is-correct' : ''}} {{selectedKana === item.kana && item.kana !== current.kana ? 'is-wrong' : ''}}"
+        data-kana="{{item.kana}}"
+        bindtap="chooseAnswer"
+        disabled="{{answered}}"
+      >
+        <text class="answer-kana">{{item.kana}}</text>
+      </button>
+    </view>
+
+    <view class="feedback {{feedbackType}}">
+      <text>{{feedbackText}}</text>
+    </view>
+
+    <view class="actions">
+      <button class="secondary" bindtap="resetSession">重练本组</button>
+      <button class="primary" bindtap="nextCard" disabled="{{!answered}}">下一题</button>
+    </view>
+  </view>
+
+  <view class="kana-table">
+    <view class="table-row header-row">
+      <text class="row-title"></text>
+      <text class="cell-title" wx:for="{{columns}}" wx:key="id">{{item.label}}</text>
+    </view>
+    <view class="table-row" wx:for="{{tableRows}}" wx:for-item="row" wx:key="id">
+      <text class="row-title">{{row.label}}</text>
+      <text
+        class="cell {{current.kana === item.kana ? 'is-current' : ''}}"
+        wx:for="{{row.cells}}"
+        wx:key="id"
+      >{{item.kana}}</text>
+    </view>
+  </view>
+</view>

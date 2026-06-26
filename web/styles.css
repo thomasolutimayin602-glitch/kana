@@ -1,0 +1,411 @@
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;
+  --panel: #ffffff;
+  --text: #151922;
+  --muted: #667085;
+  --line: #d9dee8;
+  --line-soft: #e8ebf1;
+  --accent: #2457c5;
+  --accent-soft: #eef4ff;
+  --ink: #202938;
+  --ok: #1c7c45;
+  --ok-bg: #e8f7ee;
+  --bad: #b42318;
+  --bad-bg: #fde8e4;
+  --warm: #ad6b00;
+  --warm-bg: #fff4d6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC",
+    "Hiragino Sans", "Yu Gothic", sans-serif;
+}
+
+button {
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.app-shell {
+  width: min(100%, 860px);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 28px 18px 42px;
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+h1 {
+  margin: 0;
+  color: var(--text);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.score-box {
+  min-width: 76px;
+  padding: 10px 12px;
+  border: 1px solid #cfe0ff;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  text-align: right;
+}
+
+#correctCount {
+  color: var(--accent);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+#answeredCount {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.practice-panel,
+.kana-table {
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.practice-panel {
+  padding: 16px;
+}
+
+.mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #fbfcfe;
+}
+
+.mode-tab {
+  min-height: 42px;
+  border-radius: 6px;
+  background: transparent;
+  color: #4b5565;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.mode-tab.is-active {
+  background: var(--ink);
+  color: #ffffff;
+}
+
+.filter-scroll {
+  margin-top: 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.filter-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-scroll.is-hidden {
+  display: none;
+}
+
+.filter-track {
+  display: flex;
+  gap: 8px;
+  min-width: max-content;
+}
+
+.filter-chip {
+  min-width: 62px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: #4b5565;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.filter-chip.is-active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+#scopeLabel {
+  color: var(--text);
+}
+
+.prompt {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 72px;
+  align-items: center;
+  gap: 16px;
+  min-height: 142px;
+  margin-top: 14px;
+  padding: 18px;
+  border: 1px solid #d8e4f8;
+  border-radius: 8px;
+  background: #fbfdff;
+}
+
+.prompt-label,
+.sound-mark {
+  display: block;
+}
+
+.prompt-label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sound-mark {
+  margin-top: 4px;
+  color: var(--text);
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.play-button {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 24px;
+  line-height: 72px;
+}
+
+.play-button span {
+  display: inline-block;
+  padding-left: 4px;
+}
+
+.play-button:active {
+  transform: translateY(1px);
+}
+
+.answer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.answer {
+  min-height: 92px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--text);
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.answer:disabled {
+  color: var(--text);
+  opacity: 1;
+}
+
+.answer.is-correct {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.answer.is-wrong {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+  color: var(--bad);
+}
+
+.feedback {
+  min-height: 28px;
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.feedback.correct {
+  color: var(--ok);
+}
+
+.feedback.wrong {
+  color: var(--bad);
+}
+
+.feedback.notice {
+  color: var(--warm);
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.primary-button,
+.secondary-button {
+  min-height: 48px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.primary-button {
+  background: var(--ink);
+  color: #ffffff;
+}
+
+.primary-button:disabled {
+  background: #c4cad4;
+}
+
+.secondary-button {
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: #394150;
+}
+
+.kana-table {
+  margin-top: 18px;
+  padding: 12px;
+  overflow-x: auto;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 68px repeat(5, minmax(42px, 1fr));
+  gap: 5px;
+  min-width: 520px;
+  align-items: center;
+}
+
+.table-row + .table-row {
+  margin-top: 5px;
+}
+
+.table-row span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.table-row span:first-child,
+.table-header span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.table-row span:first-child {
+  justify-content: flex-start;
+}
+
+.kana-cell {
+  background: #f4f6f9;
+}
+
+.kana-cell:empty {
+  background: transparent;
+}
+
+.kana-cell.is-current {
+  background: var(--ink);
+  color: #ffffff;
+}
+
+@media (max-width: 520px) {
+  .app-shell {
+    padding: 22px 14px 34px;
+  }
+
+  h1 {
+    font-size: 25px;
+  }
+
+  .score-box {
+    min-width: 68px;
+  }
+
+  .practice-panel {
+    padding: 12px;
+  }
+
+  .prompt {
+    grid-template-columns: minmax(0, 1fr) 64px;
+    min-height: 126px;
+    padding: 16px;
+  }
+
+  .sound-mark {
+    font-size: 58px;
+  }
+
+  .play-button {
+    width: 64px;
+    height: 64px;
+    line-height: 64px;
+  }
+
+  .answer {
+    min-height: 84px;
+    font-size: 38px;
+  }
+}
