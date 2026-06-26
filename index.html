@@ -43,6 +43,12 @@
               </div>
             </div>
 
+            <div class="chart-group-tabs" role="tablist" aria-label="字母表切换">
+              <button class="chart-group-tab is-active" type="button" data-chart-group="gojuon">清音</button>
+              <button class="chart-group-tab" type="button" data-chart-group="dakuon">浊音/半浊音</button>
+              <button class="chart-group-tab" type="button" data-chart-group="yoon">拗音</button>
+            </div>
+
             <section class="kana-table" aria-label="五十音表">
               <div id="kanaTable"></div>
             </section>
@@ -50,6 +56,13 @@
 
           <section class="practice-panel kana-flashcard-section is-hidden" id="flashcardSection" aria-label="五十音闪卡训练">
             <div class="answer-effect" id="answerEffect" aria-hidden="true"></div>
+
+            <div class="practice-group-tabs" role="tablist" aria-label="训练范围选择">
+              <button class="practice-group-tab is-active" type="button" data-practice-group="gojuon">清音</button>
+              <button class="practice-group-tab" type="button" data-practice-group="dakuon">浊音/半浊音</button>
+              <button class="practice-group-tab" type="button" data-practice-group="yoon">拗音</button>
+              <button class="practice-group-tab" type="button" data-practice-group="all-groups">全部</button>
+            </div>
 
             <div class="mode-tabs" role="tablist" aria-label="训练模式">
               <button class="mode-tab is-active" type="button" data-kana-mode="all">整体</button>

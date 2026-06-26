@@ -1,4 +1,4 @@
-const rows = [
+const gojuonRows = [
   { id: "a", label: "あ行", kana: ["あ", "い", "う", "え", "お"] },
   { id: "ka", label: "か行", kana: ["か", "き", "く", "け", "こ"] },
   { id: "sa", label: "さ行", kana: ["さ", "し", "す", "せ", "そ"] },
@@ -12,7 +12,29 @@ const rows = [
   { id: "n", label: "ん", kana: ["ん", "", "", "", ""] }
 ]
 
-const columns = [
+const dakuonRows = [
+  { id: "ga", label: "が行", kana: ["が", "ぎ", "ぐ", "げ", "ご"] },
+  { id: "za", label: "ざ行", kana: ["ざ", "じ", "ず", "ぜ", "ぞ"] },
+  { id: "da", label: "だ行", kana: ["だ", "ぢ", "づ", "で", "ど"] },
+  { id: "ba", label: "ば行", kana: ["ば", "び", "ぶ", "べ", "ぼ"] },
+  { id: "pa", label: "ぱ行", kana: ["ぱ", "ぴ", "ぷ", "ぺ", "ぽ"] }
+]
+
+const yoonRows = [
+  { id: "kya", label: "きゃ行", kana: ["きゃ", "きゅ", "きょ"] },
+  { id: "sha", label: "しゃ行", kana: ["しゃ", "しゅ", "しょ"] },
+  { id: "cha", label: "ちゃ行", kana: ["ちゃ", "ちゅ", "ちょ"] },
+  { id: "nya", label: "にゃ行", kana: ["にゃ", "にゅ", "にょ"] },
+  { id: "hya", label: "ひゃ行", kana: ["ひゃ", "ひゅ", "ひょ"] },
+  { id: "mya", label: "みゃ行", kana: ["みゃ", "みゅ", "みょ"] },
+  { id: "rya", label: "りゃ行", kana: ["りゃ", "りゅ", "りょ"] },
+  { id: "gya", label: "ぎゃ行", kana: ["ぎゃ", "ぎゅ", "ぎょ"] },
+  { id: "ja", label: "じゃ行", kana: ["じゃ", "じゅ", "じょ"] },
+  { id: "bya", label: "びゃ行", kana: ["びゃ", "びゅ", "びょ"] },
+  { id: "pya", label: "ぴゃ行", kana: ["ぴゃ", "ぴゅ", "ぴょ"] }
+]
+
+const gojuonColumns = [
   { id: "a", label: "あ段", index: 0 },
   { id: "i", label: "い段", index: 1 },
   { id: "u", label: "う段", index: 2 },
@@ -20,110 +42,81 @@ const columns = [
   { id: "o", label: "お段", index: 4 }
 ]
 
+const dakuonColumns = [
+  { id: "a", label: "あ段", index: 0 },
+  { id: "i", label: "い段", index: 1 },
+  { id: "u", label: "う段", index: 2 },
+  { id: "e", label: "え段", index: 3 },
+  { id: "o", label: "お段", index: 4 }
+]
+
+const yoonColumns = [
+  { id: "ya", label: "ゃ段", index: 0 },
+  { id: "yu", label: "ゅ段", index: 1 },
+  { id: "yo", label: "ょ段", index: 2 }
+]
+
 const romajiMap = {
-  "あ": "a",
-  "い": "i",
-  "う": "u",
-  "え": "e",
-  "お": "o",
-  "か": "ka",
-  "き": "ki",
-  "く": "ku",
-  "け": "ke",
-  "こ": "ko",
-  "さ": "sa",
-  "し": "shi",
-  "す": "su",
-  "せ": "se",
-  "そ": "so",
-  "た": "ta",
-  "ち": "chi",
-  "つ": "tsu",
-  "て": "te",
-  "と": "to",
-  "な": "na",
-  "に": "ni",
-  "ぬ": "nu",
-  "ね": "ne",
-  "の": "no",
-  "は": "ha",
-  "ひ": "hi",
-  "ふ": "fu",
-  "へ": "he",
-  "ほ": "ho",
-  "ま": "ma",
-  "み": "mi",
-  "む": "mu",
-  "め": "me",
-  "も": "mo",
-  "や": "ya",
-  "ゆ": "yu",
-  "よ": "yo",
-  "ら": "ra",
-  "り": "ri",
-  "る": "ru",
-  "れ": "re",
-  "ろ": "ro",
-  "わ": "wa",
-  "を": "wo",
-  "ん": "n"
+  "あ": "a", "い": "i", "う": "u", "え": "e", "お": "o",
+  "か": "ka", "き": "ki", "く": "ku", "け": "ke", "こ": "ko",
+  "さ": "sa", "し": "shi", "す": "su", "せ": "se", "そ": "so",
+  "た": "ta", "ち": "chi", "つ": "tsu", "て": "te", "と": "to",
+  "な": "na", "に": "ni", "ぬ": "nu", "ね": "ne", "の": "no",
+  "は": "ha", "ひ": "hi", "ふ": "fu", "へ": "he", "ほ": "ho",
+  "ま": "ma", "み": "mi", "む": "mu", "め": "me", "も": "mo",
+  "や": "ya", "ゆ": "yu", "よ": "yo",
+  "ら": "ra", "り": "ri", "る": "ru", "れ": "re", "ろ": "ro",
+  "わ": "wa", "を": "wo", "ん": "n",
+  "が": "ga", "ぎ": "gi", "ぐ": "gu", "げ": "ge", "ご": "go",
+  "ざ": "za", "じ": "ji", "ず": "zu", "ぜ": "ze", "ぞ": "zo",
+  "だ": "da", "ぢ": "di", "づ": "du", "で": "de", "ど": "do",
+  "ば": "ba", "び": "bi", "ぶ": "bu", "べ": "be", "ぼ": "bo",
+  "ぱ": "pa", "ぴ": "pi", "ぷ": "pu", "ぺ": "pe", "ぽ": "po",
+  "きゃ": "kya", "きゅ": "kyu", "きょ": "kyo",
+  "しゃ": "sha", "しゅ": "shu", "しょ": "sho",
+  "ちゃ": "cha", "ちゅ": "chu", "ちょ": "cho",
+  "にゃ": "nya", "にゅ": "nyu", "にょ": "nyo",
+  "ひゃ": "hya", "ひゅ": "hyu", "ひょ": "hyo",
+  "みゃ": "mya", "みゅ": "myu", "みょ": "myo",
+  "りゃ": "rya", "りゅ": "ryu", "りょ": "ryo",
+  "ぎゃ": "gya", "ぎゅ": "gyu", "ぎょ": "gyo",
+  "じゃ": "ja", "じゅ": "ju", "じょ": "jo",
+  "びゃ": "bya", "びゅ": "byu", "びょ": "byo",
+  "ぴゃ": "pya", "ぴゅ": "pyu", "ぴょ": "pyo"
 }
 
 const katakanaMap = {
-  "あ": "ア",
-  "い": "イ",
-  "う": "ウ",
-  "え": "エ",
-  "お": "オ",
-  "か": "カ",
-  "き": "キ",
-  "く": "ク",
-  "け": "ケ",
-  "こ": "コ",
-  "さ": "サ",
-  "し": "シ",
-  "す": "ス",
-  "せ": "セ",
-  "そ": "ソ",
-  "た": "タ",
-  "ち": "チ",
-  "つ": "ツ",
-  "て": "テ",
-  "と": "ト",
-  "な": "ナ",
-  "に": "ニ",
-  "ぬ": "ヌ",
-  "ね": "ネ",
-  "の": "ノ",
-  "は": "ハ",
-  "ひ": "ヒ",
-  "ふ": "フ",
-  "へ": "ヘ",
-  "ほ": "ホ",
-  "ま": "マ",
-  "み": "ミ",
-  "む": "ム",
-  "め": "メ",
-  "も": "モ",
-  "や": "ヤ",
-  "ゆ": "ユ",
-  "よ": "ヨ",
-  "ら": "ラ",
-  "り": "リ",
-  "る": "ル",
-  "れ": "レ",
-  "ろ": "ロ",
-  "わ": "ワ",
-  "を": "ヲ",
-  "ん": "ン"
+  "あ": "ア", "い": "イ", "う": "ウ", "え": "エ", "お": "オ",
+  "か": "カ", "き": "キ", "く": "ク", "け": "ケ", "こ": "コ",
+  "さ": "サ", "し": "シ", "す": "ス", "せ": "セ", "そ": "ソ",
+  "た": "タ", "ち": "チ", "つ": "ツ", "て": "テ", "と": "ト",
+  "な": "ナ", "に": "ニ", "ぬ": "ヌ", "ね": "ネ", "の": "ノ",
+  "は": "ハ", "ひ": "ヒ", "ふ": "フ", "へ": "ヘ", "ほ": "ホ",
+  "ま": "マ", "み": "ミ", "む": "ム", "め": "メ", "も": "モ",
+  "や": "ヤ", "ゆ": "ユ", "よ": "ヨ",
+  "ら": "ラ", "り": "リ", "る": "ル", "れ": "レ", "ろ": "ロ",
+  "わ": "ワ", "を": "ヲ", "ん": "ン",
+  "が": "ガ", "ぎ": "ギ", "ぐ": "グ", "げ": "ゲ", "ご": "ゴ",
+  "ざ": "ザ", "じ": "ジ", "ず": "ズ", "ぜ": "ゼ", "ぞ": "ゾ",
+  "だ": "ダ", "ぢ": "ヂ", "づ": "ヅ", "で": "デ", "ど": "ド",
+  "ば": "バ", "び": "ビ", "ぶ": "ブ", "べ": "ベ", "ぼ": "ボ",
+  "ぱ": "パ", "ぴ": "ピ", "ぷ": "プ", "ぺ": "ペ", "ぽ": "ポ",
+  "きゃ": "キャ", "きゅ": "キュ", "きょ": "キョ",
+  "しゃ": "シャ", "しゅ": "シュ", "しょ": "ショ",
+  "ちゃ": "チャ", "ちゅ": "チュ", "ちょ": "チョ",
+  "にゃ": "ニャ", "にゅ": "ニュ", "にょ": "ニョ",
+  "ひゃ": "ヒャ", "ひゅ": "ヒュ", "ひょ": "ヒョ",
+  "みゃ": "ミャ", "みゅ": "ミュ", "みょ": "ミョ",
+  "りゃ": "リャ", "りゅ": "リュ", "りょ": "リョ",
+  "ぎゃ": "ギャ", "ぎゅ": "ギュ", "ぎょ": "ギョ",
+  "じゃ": "ジャ", "じゅ": "ジュ", "じょ": "ジョ",
+  "びゃ": "ビャ", "びゅ": "ビュ", "びょ": "ビョ",
+  "ぴゃ": "ピャ", "ぴゅ": "ピュ", "ぴょ": "ピョ"
 }
 
 const columnKana = {
-  a: "あ",
-  i: "い",
-  u: "う",
-  e: "え",
-  o: "お"
+  a: "あ", i: "い", u: "う", e: "え", o: "お",
+  ya: "や", yu: "ゆ", yo: "よ"
 }
 
 const modeLabels = {
@@ -136,31 +129,29 @@ const optionCount = 4
 const audioBase = "assets/audio/kana"
 const kanaAudioCacheName = "nihon-kana-audio-v1"
 
-const tableRows = rows.map((row) => ({
-  id: row.id,
-  label: row.label,
-  cells: row.kana.map((kana, columnIndex) => ({
-    id: `${row.id}-${columnIndex}`,
-    kana
-  }))
-}))
-
-const basicKana = rows.reduce((items, row) => {
-  row.kana.forEach((kana, columnIndex) => {
-    if (!kana) return
-    const column = row.id === "n" ? null : columns[columnIndex]
-    items.push({
-      kana,
-      katakana: katakanaMap[kana],
-      romaji: romajiMap[kana],
-      rowId: row.id,
-      rowLabel: row.label,
-      columnId: column ? column.id : "special",
-      columnLabel: column ? column.label : "特殊"
+function buildKanaList(rowsList, columnsList) {
+  return rowsList.reduce((items, row) => {
+    row.kana.forEach((kana, columnIndex) => {
+      if (!kana) return
+      const column = (row.id === "n" || !columnsList) ? null : columnsList[columnIndex]
+      items.push({
+        kana,
+        katakana: katakanaMap[kana],
+        romaji: romajiMap[kana],
+        rowId: row.id,
+        rowLabel: row.label,
+        columnId: column ? column.id : "special",
+        columnLabel: column ? column.label : "特殊"
+      })
     })
-  })
-  return items
-}, [])
+    return items
+  }, [])
+}
+
+const gojuonKana = buildKanaList(gojuonRows, gojuonColumns)
+const dakuonKana = buildKanaList(dakuonRows, dakuonColumns)
+const yoonKana = buildKanaList(yoonRows, yoonColumns)
+const allKana = [...gojuonKana, ...dakuonKana, ...yoonKana]
 
 const state = {
   section: "chart",
@@ -176,6 +167,8 @@ const state = {
   wrongSelections: new Set(),
   autoNext: false,
   qtype: "romaji-to-kana",
+  chartGroup: "gojuon",
+  practiceGroup: "gojuon",
   stats: {
     answered: 0,
     correct: 0
@@ -204,7 +197,9 @@ const elements = {
   autoNextToggle: document.getElementById("autoNextToggle"),
   kanaTable: document.getElementById("kanaTable"),
   modeTabs: Array.from(document.querySelectorAll(".mode-tab")),
-  qtypeTabs: Array.from(document.querySelectorAll(".qtype-tab"))
+  qtypeTabs: Array.from(document.querySelectorAll(".qtype-tab")),
+  chartGroupTabs: Array.from(document.querySelectorAll(".chart-group-tab")),
+  practiceGroupTabs: Array.from(document.querySelectorAll(".practice-group-tab"))
 }
 
 const audio = new Audio()
@@ -246,39 +241,88 @@ function displayColumnLabel(column) {
 }
 
 function getFilters(mode) {
-  if (mode === "row") return rows.map((row) => ({ id: row.id, label: displayRowLabel(row) }))
-  if (mode === "column") return columns.map((column) => ({ id: column.id, label: displayColumnLabel(column) }))
+  let activeRows = gojuonRows
+  let activeColumns = gojuonColumns
+
+  if (state.practiceGroup === "dakuon") {
+    activeRows = dakuonRows
+    activeColumns = dakuonColumns
+  } else if (state.practiceGroup === "yoon") {
+    activeRows = yoonRows
+    activeColumns = yoonColumns
+  } else if (state.practiceGroup === "all-groups") {
+    return []
+  }
+
+  if (mode === "row") return activeRows.map((row) => ({ id: row.id, label: displayRowLabel(row) }))
+  if (mode === "column") return activeColumns.map((column) => ({ id: column.id, label: displayColumnLabel(column) }))
   return []
 }
 
 function getDefaultFilter(mode) {
-  if (mode === "row") return rows[0].id
-  if (mode === "column") return columns[0].id
+  let activeRows = gojuonRows
+  let activeColumns = gojuonColumns
+
+  if (state.practiceGroup === "dakuon") {
+    activeRows = dakuonRows
+    activeColumns = dakuonColumns
+  } else if (state.practiceGroup === "yoon") {
+    activeRows = yoonRows
+    activeColumns = yoonColumns
+  } else if (state.practiceGroup === "all-groups") {
+    return ""
+  }
+
+  if (mode === "row") return activeRows[0].id
+  if (mode === "column") return activeColumns[0].id
   return ""
 }
 
 function getActiveKana() {
+  let baseList = gojuonKana
+  if (state.practiceGroup === "dakuon") baseList = dakuonKana
+  else if (state.practiceGroup === "yoon") baseList = yoonKana
+  else if (state.practiceGroup === "all-groups") baseList = allKana
+
   const activeFilter = state.activeFilter || getDefaultFilter(state.mode)
   if (state.mode === "row") {
-    return basicKana.filter((item) => item.rowId === activeFilter)
+    return baseList.filter((item) => item.rowId === activeFilter)
   }
   if (state.mode === "column") {
-    return basicKana.filter((item) => item.columnId === activeFilter)
+    return baseList.filter((item) => item.columnId === activeFilter)
   }
-  return basicKana
+  return baseList
 }
 
 function getScopeLabel() {
+  if (state.practiceGroup === "all-groups") {
+    return "全部假名"
+  }
+
+  let activeRows = gojuonRows
+  let activeColumns = gojuonColumns
+  let groupLabel = "清音"
+
+  if (state.practiceGroup === "dakuon") {
+    activeRows = dakuonRows
+    activeColumns = dakuonColumns
+    groupLabel = "浊音/半浊音"
+  } else if (state.practiceGroup === "yoon") {
+    activeRows = yoonRows
+    activeColumns = yoonColumns
+    groupLabel = "拗音"
+  }
+
   const activeFilter = state.activeFilter || getDefaultFilter(state.mode)
   if (state.mode === "row") {
-    const row = rows.find((item) => item.id === activeFilter)
-    return row ? `${modeLabels.row} · ${displayRowLabel(row)}` : modeLabels.row
+    const row = activeRows.find((item) => item.id === activeFilter)
+    return row ? `${groupLabel} · ${displayRowLabel(row)}` : groupLabel
   }
   if (state.mode === "column") {
-    const column = columns.find((item) => item.id === activeFilter)
-    return column ? `${modeLabels.column} · ${displayColumnLabel(column)}` : modeLabels.column
+    const column = activeColumns.find((item) => item.id === activeFilter)
+    return column ? `${groupLabel} · ${displayColumnLabel(column)}` : groupLabel
   }
-  return modeLabels.all
+  return `${groupLabel} · 整体训练`
 }
 
 function updateStats() {
@@ -360,50 +404,80 @@ function renderAnswers() {
   })
 }
 
+function getActiveChartData() {
+  if (state.chartGroup === "dakuon") {
+    return {
+      rows: dakuonRows,
+      columns: dakuonColumns,
+      kanaList: dakuonKana
+    }
+  }
+  if (state.chartGroup === "yoon") {
+    return {
+      rows: yoonRows,
+      columns: yoonColumns,
+      kanaList: yoonKana
+    }
+  }
+  return {
+    rows: gojuonRows,
+    columns: gojuonColumns,
+    kanaList: gojuonKana
+  }
+}
+
 function renderTable() {
   elements.kanaTable.innerHTML = ""
 
+  const { rows: activeRows, columns: activeColumns, kanaList: activeKanaList } = getActiveChartData()
+  const colCount = activeColumns.length
+
   const header = document.createElement("div")
   header.className = "table-row table-header"
+  header.style.gridTemplateColumns = `68px repeat(${colCount}, minmax(42px, 1fr))`
   const corner = document.createElement("span")
   corner.textContent = "播放"
   header.appendChild(corner)
 
-  columns.forEach((column) => {
+  activeColumns.forEach((column) => {
     const button = document.createElement("button")
     button.type = "button"
     button.className = "table-action table-column-action"
     button.textContent = displayColumnLabel(column)
     button.setAttribute("aria-label", `播放${displayColumnLabel(column)}`)
-    button.addEventListener("click", () => playColumn(column.id))
+    button.addEventListener("click", () => playColumn(column.id, activeColumns, activeKanaList))
     header.appendChild(button)
   })
 
   elements.kanaTable.appendChild(header)
 
-  tableRows.forEach((row) => {
+  activeRows.forEach((row) => {
     const rowElement = document.createElement("div")
     rowElement.className = "table-row"
+    rowElement.style.gridTemplateColumns = `68px repeat(${colCount}, minmax(42px, 1fr))`
 
-    const rowSource = rows.find((item) => item.id === row.id)
     const rowButton = document.createElement("button")
     rowButton.type = "button"
     rowButton.className = "table-action table-row-action"
-    rowButton.textContent = displayRowLabel(rowSource)
-    rowButton.setAttribute("aria-label", `播放${displayRowLabel(rowSource)}`)
-    rowButton.addEventListener("click", () => playRow(row.id))
+    rowButton.textContent = displayRowLabel(row)
+    rowButton.setAttribute("aria-label", `播放${displayRowLabel(row)}`)
+    rowButton.addEventListener("click", () => playRow(row.id, activeKanaList))
     rowElement.appendChild(rowButton)
 
-    row.cells.forEach((cell) => {
+    row.kana.forEach((kana) => {
       const cellElement = document.createElement("button")
       cellElement.type = "button"
       cellElement.className = "kana-cell"
-      const kanaItem = basicKana.find((item) => item.kana === cell.kana)
+      const kanaItem = activeKanaList.find((item) => item.kana === kana)
 
-      if (kanaItem) {
+      if (kana && kanaItem) {
         cellElement.textContent = displayKana(kanaItem)
         cellElement.setAttribute("aria-label", `播放 ${displayKana(kanaItem)}`)
         cellElement.addEventListener("click", () => playKanaItem(kanaItem))
+        
+        if (state.current && state.current.kana === kana) {
+          cellElement.classList.add("is-current")
+        }
       } else {
         cellElement.textContent = ""
         cellElement.disabled = true
@@ -428,6 +502,18 @@ function renderQtypeTabs() {
   })
 }
 
+function renderChartGroupTabs() {
+  elements.chartGroupTabs.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.chartGroup === state.chartGroup)
+  })
+}
+
+function renderPracticeGroupTabs() {
+  elements.practiceGroupTabs.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.practiceGroup === state.practiceGroup)
+  })
+}
+
 function renderCard() {
   renderScriptButtons()
   renderSections()
@@ -445,8 +531,18 @@ function renderCard() {
 
   elements.nextButton.disabled = !state.completed
   elements.autoNextToggle.checked = state.autoNext
+
+  // Hide mode selector and filter chips if training "all-groups"
+  const isAllGroups = state.practiceGroup === "all-groups"
+  const modeTabsContainer = document.querySelector(".mode-tabs")
+  if (modeTabsContainer) {
+    modeTabsContainer.style.display = isAllGroups ? "none" : "grid"
+  }
+
   renderModeTabs()
   renderQtypeTabs()
+  renderChartGroupTabs()
+  renderPracticeGroupTabs()
   renderFilters()
   renderAnswers()
   renderTable()
@@ -456,10 +552,16 @@ function renderCard() {
 function setCard(deckIndex) {
   state.deckIndex = deckIndex
   state.current = state.deck[deckIndex]
+
+  let baseList = gojuonKana
+  if (state.practiceGroup === "dakuon") baseList = dakuonKana
+  else if (state.practiceGroup === "yoon") baseList = yoonKana
+  else if (state.practiceGroup === "all-groups") baseList = allKana
+
   state.options = shuffle([
     state.current,
     ...pickRandom(
-      basicKana.filter((item) => item.kana !== state.current.kana),
+      baseList.filter((item) => item.kana !== state.current.kana),
       optionCount - 1
     )
   ])
@@ -657,16 +759,17 @@ async function playKanaSequence(items, label) {
   }
 }
 
-function playRow(rowId) {
-  const row = rows.find((item) => item.id === rowId)
-  const items = basicKana.filter((item) => item.rowId === rowId)
-  if (!row || !items.length) return
+function playRow(rowId, activeKanaList = gojuonKana) {
+  const items = activeKanaList.filter((item) => item.rowId === rowId)
+  if (!items.length) return
+  const row = [...gojuonRows, ...dakuonRows, ...yoonRows].find((item) => item.id === rowId)
+  if (!row) return
   playKanaSequence(items, displayRowLabel(row))
 }
 
-function playColumn(columnId) {
-  const column = columns.find((item) => item.id === columnId)
-  const items = basicKana.filter((item) => item.columnId === columnId)
+function playColumn(columnId, activeColumns = gojuonColumns, activeKanaList = gojuonKana) {
+  const column = activeColumns.find((item) => item.id === columnId)
+  const items = activeKanaList.filter((item) => item.columnId === columnId)
   if (!column || !items.length) return
   playKanaSequence(items, displayColumnLabel(column))
 }
@@ -681,7 +784,7 @@ function playCurrentAudio() {
 }
 
 async function cacheKanaAudio() {
-  const urls = basicKana.map((item) => `${audioBase}/${item.romaji}.mp3`)
+  const urls = allKana.map((item) => `${audioBase}/${item.romaji}.mp3`)
 
   if (!("caches" in window)) {
     elements.cacheStatus.textContent = "浏览器不支持本地缓存，使用直接播放。"
@@ -770,6 +873,26 @@ elements.qtypeTabs.forEach((button) => {
     const nextQtype = button.dataset.kanaQtype
     if (nextQtype === state.qtype) return
     state.qtype = nextQtype
+    startSession()
+  })
+})
+
+elements.chartGroupTabs.forEach((button) => {
+  button.addEventListener("click", () => {
+    const nextGroup = button.dataset.chartGroup
+    if (nextGroup === state.chartGroup) return
+    state.chartGroup = nextGroup
+    renderCard()
+  })
+})
+
+elements.practiceGroupTabs.forEach((button) => {
+  button.addEventListener("click", () => {
+    const nextGroup = button.dataset.practiceGroup
+    if (nextGroup === state.practiceGroup) return
+    state.practiceGroup = nextGroup
+    state.mode = "all"
+    state.activeFilter = ""
     startSession()
   })
 })

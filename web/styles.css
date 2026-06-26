@@ -154,6 +154,58 @@ h1 {
   color: #ffffff;
 }
 
+.chart-group-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #fbfcfe;
+  margin-bottom: 14px;
+}
+
+.chart-group-tab {
+  min-height: 38px;
+  border-radius: 6px;
+  background: transparent;
+  color: #4b5565;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.chart-group-tab.is-active {
+  background: var(--ink);
+  color: #ffffff;
+}
+
+.practice-group-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #fbfcfe;
+  margin-bottom: 12px;
+}
+
+.practice-group-tab {
+  min-height: 36px;
+  border-radius: 6px;
+  background: transparent;
+  color: #4b5565;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.practice-group-tab.is-active {
+  background: var(--ink);
+  color: #ffffff;
+}
+
 .filter-scroll {
   margin-top: 14px;
   overflow-x: auto;
