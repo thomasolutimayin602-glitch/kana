@@ -175,6 +175,7 @@ const state = {
   selectedKana: "",
   wrongSelections: new Set(),
   autoNext: false,
+  qtype: "romaji-to-kana",
   stats: {
     answered: 0,
     correct: 0
@@ -202,7 +203,8 @@ const elements = {
   nextButton: document.getElementById("nextButton"),
   autoNextToggle: document.getElementById("autoNextToggle"),
   kanaTable: document.getElementById("kanaTable"),
-  modeTabs: Array.from(document.querySelectorAll(".mode-tab"))
+  modeTabs: Array.from(document.querySelectorAll(".mode-tab")),
+  qtypeTabs: Array.from(document.querySelectorAll(".qtype-tab"))
 }
 
 const audio = new Audio()
@@ -332,9 +334,18 @@ function renderAnswers() {
     const button = document.createElement("button")
     button.type = "button"
     button.className = "answer"
-    button.textContent = displayKana(option)
+
+    if (state.qtype === "kana-to-romaji") {
+      button.textContent = option.romaji
+      button.style.fontSize = "28px"
+      button.setAttribute("aria-label", `选择 ${option.romaji}`)
+    } else {
+      button.textContent = displayKana(option)
+      button.style.fontSize = ""
+      button.setAttribute("aria-label", `选择 ${displayKana(option)}`)
+    }
+
     button.disabled = state.completed
-    button.setAttribute("aria-label", `选择 ${displayKana(option)}`)
 
     if (state.completed && option.kana === state.current.kana) {
       button.classList.add("is-correct")
@@ -411,15 +422,31 @@ function setFeedback(text, type = "") {
   elements.feedbackText.className = `feedback${type ? ` ${type}` : ""}`
 }
 
+function renderQtypeTabs() {
+  elements.qtypeTabs.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.kanaQtype === state.qtype)
+  })
+}
+
 function renderCard() {
   renderScriptButtons()
   renderSections()
   elements.scopeLabel.textContent = getScopeLabel()
   elements.progressText.textContent = `${state.deckIndex + 1} / ${state.deck.length}`
-  elements.soundMark.textContent = state.current ? state.current.romaji : "?"
+
+  const labelElement = document.getElementById("promptLabel")
+  if (state.qtype === "kana-to-romaji") {
+    if (labelElement) labelElement.textContent = "假名"
+    elements.soundMark.textContent = state.current ? displayKana(state.current) : "?"
+  } else {
+    if (labelElement) labelElement.textContent = "读音"
+    elements.soundMark.textContent = state.current ? state.current.romaji : "?"
+  }
+
   elements.nextButton.disabled = !state.completed
   elements.autoNextToggle.checked = state.autoNext
   renderModeTabs()
+  renderQtypeTabs()
   renderFilters()
   renderAnswers()
   renderTable()
@@ -734,6 +761,15 @@ elements.modeTabs.forEach((button) => {
     if (nextMode === state.mode) return
     state.mode = nextMode
     state.activeFilter = getDefaultFilter(nextMode)
+    startSession()
+  })
+})
+
+elements.qtypeTabs.forEach((button) => {
+  button.addEventListener("click", () => {
+    const nextQtype = button.dataset.kanaQtype
+    if (nextQtype === state.qtype) return
+    state.qtype = nextQtype
     startSession()
   })
 })

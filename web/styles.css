@@ -128,6 +128,32 @@ h1 {
   color: #ffffff;
 }
 
+.qtype-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #fbfcfe;
+  margin-top: 12px;
+}
+
+.qtype-tab {
+  min-height: 40px;
+  border-radius: 6px;
+  background: transparent;
+  color: #4b5565;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.qtype-tab.is-active {
+  background: var(--ink);
+  color: #ffffff;
+}
+
 .filter-scroll {
   margin-top: 14px;
   overflow-x: auto;

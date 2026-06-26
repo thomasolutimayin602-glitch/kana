@@ -30,6 +30,7 @@ Page({
     columns,
     tableRows,
     mode: "all",
+    qtype: "romaji-to-kana",
     filters: [],
     activeFilter: "",
     scopeLabel: MODE_LABELS.all,
@@ -82,6 +83,20 @@ Page({
     )
   },
 
+  changeQtype(event) {
+    const qtype = event.currentTarget.dataset.qtype
+    if (qtype === this.data.qtype) {
+      return
+    }
+
+    this.setData(
+      {
+        qtype
+      },
+      () => this.startSession()
+    )
+  },
+
   changeFilter(event) {
     const activeFilter = event.currentTarget.dataset.id
     if (activeFilter === this.data.activeFilter) {
@@ -103,14 +118,24 @@ Page({
       correct: this.data.stats.correct + (isCorrect ? 1 : 0)
     }
 
+    const isRomajiToKana = this.data.qtype === "romaji-to-kana"
+    let feedbackText = ""
+    if (isCorrect) {
+      feedbackText = isRomajiToKana
+        ? "正确。继续保持读音到假名的直接反应。"
+        : "正确。罗马音记忆很熟练！"
+    } else {
+      feedbackText = isRomajiToKana
+        ? `不对，答案是 ${this.data.current.kana}，读音 ${this.data.current.romaji}。`
+        : `不对，答案是 ${this.data.current.romaji}，假名是 ${this.data.current.kana}。`
+    }
+
     this.setData({
       answered: true,
       selectedKana,
       stats,
       feedbackType: isCorrect ? "correct" : "wrong",
-      feedbackText: isCorrect
-        ? "正确。继续保持读音到假名的直接反应。"
-        : `不对，答案是 ${this.data.current.kana}，读音 ${this.data.current.romaji}。`
+      feedbackText
     })
   },
 
@@ -170,6 +195,11 @@ Page({
     )
     const options = shuffle([current].concat(distractors))
 
+    const isRomajiToKana = this.data.qtype === "romaji-to-kana"
+    const feedbackText = isRomajiToKana
+      ? "点击播放，听读音后选择对应的平假名。"
+      : "观察显示的假名，选择对应的罗马音。"
+
     this.setData({
       deckIndex,
       current,
@@ -177,7 +207,7 @@ Page({
       answered: false,
       selectedKana: "",
       feedbackType: "",
-      feedbackText: "点击播放，听读音后选择对应的平假名。"
+      feedbackText
     })
   },
 

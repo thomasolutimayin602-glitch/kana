@@ -28,6 +28,19 @@
     >按列</button>
   </view>
 
+  <view class="qtype-tabs" aria-label="题型切换">
+    <button
+      class="qtype-tab {{qtype === 'romaji-to-kana' ? 'is-active' : ''}}"
+      data-qtype="romaji-to-kana"
+      bindtap="changeQtype"
+    >听音选假名</button>
+    <button
+      class="qtype-tab {{qtype === 'kana-to-romaji' ? 'is-active' : ''}}"
+      data-qtype="kana-to-romaji"
+      bindtap="changeQtype"
+    >看假名选罗马音</button>
+  </view>
+
   <scroll-view wx:if="{{mode !== 'all'}}" class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
     <view class="filter-track">
       <button
@@ -47,8 +60,8 @@
     </view>
 
     <view class="prompt">
-      <text class="prompt-label">读音</text>
-      <text class="sound-mark">?</text>
+      <text class="prompt-label">{{qtype === 'kana-to-romaji' ? '假名' : '读音'}}</text>
+      <text class="sound-mark">{{qtype === 'kana-to-romaji' ? current.kana : '?'}}</text>
       <button class="audio-button" bindtap="playCurrentAudio" hover-class="is-pressing" aria-label="播放读音">
         <text class="audio-icon">▶</text>
       </button>
@@ -58,12 +71,12 @@
       <button
         wx:for="{{options}}"
         wx:key="kana"
-        class="answer {{answered && item.kana === current.kana ? 'is-correct' : ''}} {{selectedKana === item.kana && item.kana !== current.kana ? 'is-wrong' : ''}}"
+        class="answer {{qtype === 'kana-to-romaji' ? 'is-romaji' : ''}} {{answered && item.kana === current.kana ? 'is-correct' : ''}} {{selectedKana === item.kana && item.kana !== current.kana ? 'is-wrong' : ''}}"
         data-kana="{{item.kana}}"
         bindtap="chooseAnswer"
         disabled="{{answered}}"
       >
-        <text class="answer-kana">{{item.kana}}</text>
+        <text class="answer-kana">{{qtype === 'kana-to-romaji' ? item.romaji : item.kana}}</text>
       </button>
     </view>
 

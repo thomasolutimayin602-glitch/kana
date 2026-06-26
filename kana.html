@@ -58,6 +58,11 @@
               <button class="mode-tab" type="button" data-kana-mode="column">按列</button>
             </div>
 
+            <div class="qtype-tabs" role="tablist" aria-label="题型切换">
+              <button class="qtype-tab is-active" type="button" data-kana-qtype="romaji-to-kana">听音选假名</button>
+              <button class="qtype-tab" type="button" data-kana-qtype="kana-to-romaji">看假名选罗马音</button>
+            </div>
+
             <div class="filter-scroll is-hidden" id="filterScroll">
               <div class="filter-track" id="filterTrack"></div>
             </div>
@@ -74,7 +79,7 @@
 
             <div class="prompt">
               <div>
-                <span class="prompt-label">读音</span>
+                <span class="prompt-label" id="promptLabel">读音</span>
                 <span class="sound-mark" id="soundMark">?</span>
               </div>
               <button class="play-button" id="playButton" type="button" aria-label="播放读音">

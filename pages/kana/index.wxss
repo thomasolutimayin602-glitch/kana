@@ -89,6 +89,35 @@
   font-weight: 700;
 }
 
+.qtype-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8rpx;
+  box-sizing: border-box;
+  padding: 8rpx;
+  border: 1rpx solid #e5e7eb;
+  border-radius: 8rpx;
+  background: #ffffff;
+  margin-top: 14rpx;
+}
+
+.qtype-tab {
+  min-height: 70rpx;
+  border: 0;
+  border-radius: 6rpx;
+  background: transparent;
+  color: #475569;
+  font-size: 26rpx;
+  line-height: 70rpx;
+  text-align: center;
+}
+
+.qtype-tab.is-active {
+  background: #111827;
+  color: #ffffff;
+  font-weight: 700;
+}
+
 .filter-scroll {
   width: 100%;
   margin: 20rpx 0 0;
@@ -228,6 +257,10 @@
   font-size: 62rpx;
   font-weight: 800;
   line-height: 142rpx;
+}
+
+.answer.is-romaji .answer-kana {
+  font-size: 44rpx;
 }
 
 .answer.is-correct {
