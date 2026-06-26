@@ -42,6 +42,9 @@
                 <h2>五十音图</h2>
                 <p>包含清音、浊音/半浊音与拗音。开始训练后本表会被隐藏。</p>
               </div>
+              <button class="secondary-button help-button" id="helpButton" type="button" style="min-height: 36px; padding: 0 14px; font-size: 13px; display: flex; align-items: center; gap: 6px; align-self: flex-start; margin-top: 4px;">
+                <span style="font-weight: bold; font-size: 14px;">?</span>使用帮助
+              </button>
             </div>
 
             <div id="kanaTable"></div>
@@ -92,6 +95,21 @@
         </div>
       </section>
     </main>
+
+    <!-- Interactive Tutorial Overlay and Card -->
+    <div id="tutorialOverlay" class="tutorial-overlay is-hidden" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: transparent; z-index: 9999; pointer-events: auto;"></div>
+    <div id="tutorialSpotlight" class="tutorial-spotlight" style="position: fixed; z-index: 10000; pointer-events: none; border-radius: 6px; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.65); transition: all 0.25s ease-out; display: none;"></div>
+    
+    <div id="tutorialCard" class="tutorial-card is-hidden" style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); width: min(calc(100vw - 32px), 400px); background: #ffffff; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); padding: 18px; z-index: 10001; transition: opacity 0.25s ease-out, transform 0.25s ease-out;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span id="tutorialStepIndicator" style="font-size: 12px; font-weight: bold; color: var(--accent);">步骤 1 / 4</span>
+        <button id="tutorialClose" type="button" style="background: transparent; border: 0; font-size: 18px; color: var(--muted); cursor: pointer; line-height: 1;">&times;</button>
+      </div>
+      <p id="tutorialText" style="margin: 0 0 16px 0; font-size: 14px; line-height: 1.5; color: var(--text); font-weight: 500;">打钩可以把本列加入练习。</p>
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button id="tutorialNext" class="primary-button" type="button" style="min-height: 36px; padding: 0 16px; font-size: 13px;">下一步</button>
+      </div>
+    </div>
 
     <script src="web/kana.js"></script>
   </body>

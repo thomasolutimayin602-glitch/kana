@@ -974,5 +974,142 @@ elements.autoNextToggle.addEventListener("change", () => {
 })
 audio.addEventListener("error", () => setFeedback("音频文件未加载", "notice"))
 
+// --- Interactive Tutorial Walkthrough ---
+const tutorialSteps = [
+  {
+    text: "1. 打钩可以把本列加入练习。",
+    getTarget: () => document.querySelector(".column-practice-checkbox")
+  },
+  {
+    text: "2. 点击本行最前面的行名可以播放本行假名。",
+    getTarget: () => document.querySelector(".table-row-action")
+  },
+  {
+    text: "3. 点击本列最上面的列名可以播放本列假名。",
+    getTarget: () => document.querySelector(".table-column-action")
+  },
+  {
+    text: "4. 点击听音选假名、看假名选音可以进行两种练习，练习内容由打钩内容决定。",
+    getTarget: () => document.querySelector(".kana-section-tabs")
+  }
+]
+
+let currentTutorialStep = 0
+
+function showTutorialStep(stepIndex) {
+  if (stepIndex < 0 || stepIndex >= tutorialSteps.length) {
+    endTutorial()
+    return
+  }
+
+  currentTutorialStep = stepIndex
+  const step = tutorialSteps[stepIndex]
+
+  const indicator = document.getElementById("tutorialStepIndicator")
+  if (indicator) {
+    indicator.textContent = `步骤 ${stepIndex + 1} / ${tutorialSteps.length}`
+  }
+
+  const textElement = document.getElementById("tutorialText")
+  if (textElement) {
+    textElement.textContent = step.text
+  }
+
+  const nextBtn = document.getElementById("tutorialNext")
+  if (nextBtn) {
+    nextBtn.textContent = stepIndex === tutorialSteps.length - 1 ? "我知道了" : "下一步"
+  }
+
+  const target = step.getTarget()
+  if (target) {
+    target.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" })
+    setTimeout(() => {
+      updateSpotlight(target)
+    }, 150)
+  } else {
+    updateSpotlight(null)
+  }
+}
+
+function updateSpotlight(target) {
+  const spotlight = document.getElementById("tutorialSpotlight")
+  if (!spotlight) return
+
+  if (!target) {
+    spotlight.style.display = "none"
+    return
+  }
+
+  spotlight.style.display = "block"
+  const rect = target.getBoundingClientRect()
+  spotlight.style.left = `${rect.left - 4}px`
+  spotlight.style.top = `${rect.top - 4}px`
+  spotlight.style.width = `${rect.width + 8}px`
+  spotlight.style.height = `${rect.height + 8}px`
+}
+
+function startTutorial() {
+  if (state.section !== "chart") {
+    state.section = "chart"
+    renderCard()
+  }
+
+  document.body.style.overflow = "hidden"
+  document.getElementById("tutorialOverlay").classList.remove("is-hidden")
+  document.getElementById("tutorialCard").classList.remove("is-hidden")
+
+  window.addEventListener("resize", onTutorialResizeScroll)
+  window.addEventListener("scroll", onTutorialResizeScroll, true)
+
+  showTutorialStep(0)
+}
+
+function endTutorial() {
+  document.body.style.overflow = ""
+  document.getElementById("tutorialOverlay").classList.add("is-hidden")
+  document.getElementById("tutorialCard").classList.add("is-hidden")
+  
+  const spotlight = document.getElementById("tutorialSpotlight")
+  if (spotlight) spotlight.style.display = "none"
+
+  window.removeEventListener("resize", onTutorialResizeScroll)
+  window.removeEventListener("scroll", onTutorialResizeScroll, true)
+}
+
+function onTutorialResizeScroll() {
+  if (document.getElementById("tutorialCard").classList.contains("is-hidden")) return
+  const step = tutorialSteps[currentTutorialStep]
+  if (step) {
+    const target = step.getTarget()
+    if (target) {
+      updateSpotlight(target)
+    }
+  }
+}
+
+// Bind Help button click
+const helpBtn = document.getElementById("helpButton")
+if (helpBtn) {
+  helpBtn.addEventListener("click", startTutorial)
+}
+
+// Bind tutorial controls
+const tutNextBtn = document.getElementById("tutorialNext")
+if (tutNextBtn) {
+  tutNextBtn.addEventListener("click", () => {
+    showTutorialStep(currentTutorialStep + 1)
+  })
+}
+
+const tutCloseBtn = document.getElementById("tutorialClose")
+if (tutCloseBtn) {
+  tutCloseBtn.addEventListener("click", endTutorial)
+}
+
+const tutOverlay = document.getElementById("tutorialOverlay")
+if (tutOverlay) {
+  tutOverlay.addEventListener("click", endTutorial)
+}
+
 startSession()
 cacheKanaAudio()
