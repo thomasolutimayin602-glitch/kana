@@ -129,11 +129,11 @@ const optionCount = 4
 const audioBase = "assets/audio/kana"
 const kanaAudioCacheName = "nihon-kana-audio-v1"
 
-function buildKanaList(rowsList, columnsList) {
+function buildKanaList(rowsList, columnsList, groupPrefix) {
   return rowsList.reduce((items, row) => {
     row.kana.forEach((kana, columnIndex) => {
       if (!kana) return
-      const column = (row.id === "n" || !columnsList) ? null : columnsList[columnIndex]
+      const column = (!columnsList) ? null : (row.id === "n" ? columnsList[0] : columnsList[columnIndex])
       items.push({
         kana,
         katakana: katakanaMap[kana],
@@ -141,16 +141,17 @@ function buildKanaList(rowsList, columnsList) {
         rowId: row.id,
         rowLabel: row.label,
         columnId: column ? column.id : "special",
-        columnLabel: column ? column.label : "特殊"
+        columnLabel: column ? column.label : "特殊",
+        groupColumnId: column ? `${groupPrefix}-${column.id}` : `${groupPrefix}-special`
       })
     })
     return items
   }, [])
 }
 
-const gojuonKana = buildKanaList(gojuonRows, gojuonColumns)
-const dakuonKana = buildKanaList(dakuonRows, dakuonColumns)
-const yoonKana = buildKanaList(yoonRows, yoonColumns)
+const gojuonKana = buildKanaList(gojuonRows, gojuonColumns, "gojuon")
+const dakuonKana = buildKanaList(dakuonRows, dakuonColumns, "dakuon")
+const yoonKana = buildKanaList(yoonRows, yoonColumns, "yoon")
 const allKana = [...gojuonKana, ...dakuonKana, ...yoonKana]
 
 const state = {
@@ -169,6 +170,11 @@ const state = {
   qtype: "romaji-to-kana",
   chartGroup: "gojuon",
   practiceGroup: "all-groups",
+  selectedColumns: new Set([
+    "gojuon-a", "gojuon-i", "gojuon-u", "gojuon-e", "gojuon-o",
+    "dakuon-a", "dakuon-i", "dakuon-u", "dakuon-e", "dakuon-o",
+    "yoon-ya", "yoon-yu", "yoon-yo"
+  ]),
   stats: {
     answered: 0,
     correct: 0
@@ -281,14 +287,16 @@ function getActiveKana() {
   else if (state.practiceGroup === "yoon") baseList = yoonKana
   else if (state.practiceGroup === "all-groups") baseList = allKana
 
+  const filteredList = baseList.filter((item) => state.selectedColumns.has(item.groupColumnId))
+
   const activeFilter = state.activeFilter || getDefaultFilter(state.mode)
   if (state.mode === "row") {
-    return baseList.filter((item) => item.rowId === activeFilter)
+    return filteredList.filter((item) => item.rowId === activeFilter)
   }
   if (state.mode === "column") {
-    return baseList.filter((item) => item.columnId === activeFilter)
+    return filteredList.filter((item) => item.columnId === activeFilter)
   }
-  return baseList
+  return filteredList
 }
 
 function getScopeLabel() {
@@ -370,6 +378,7 @@ function renderFilters() {
 
 function renderAnswers() {
   elements.answerGrid.innerHTML = ""
+  if (!state.current) return
 
   state.options.forEach((option) => {
     const button = document.createElement("button")
@@ -401,7 +410,7 @@ function renderAnswers() {
   })
 }
 
-function renderSubTable(title, rows, columns, kanaList, index) {
+function renderSubTable(title, rows, columns, kanaList, prefix, index) {
   const groupContainer = document.createElement("div")
   groupContainer.className = "chart-group-container"
 
@@ -420,6 +429,54 @@ function renderSubTable(title, rows, columns, kanaList, index) {
 
   const colCount = columns.length
 
+  // --- Add Checkbox Row ---
+  const checkRow = document.createElement("div")
+  checkRow.className = "table-row table-checkbox-row"
+  checkRow.style.gridTemplateColumns = `68px repeat(${colCount}, minmax(42px, 1fr))`
+
+  const checkLabel = document.createElement("span")
+  checkLabel.className = "table-checkbox-label"
+  checkLabel.textContent = "加入练习"
+  checkLabel.style.fontSize = "11px"
+  checkLabel.style.fontWeight = "800"
+  checkLabel.style.color = "var(--accent)"
+  checkLabel.style.justifyContent = "flex-start"
+  checkRow.appendChild(checkLabel)
+
+  columns.forEach((column) => {
+    const cell = document.createElement("span")
+    cell.style.display = "flex"
+    cell.style.alignItems = "center"
+    cell.style.justifyContent = "center"
+    cell.style.minHeight = "36px"
+
+    const checkbox = document.createElement("input")
+    checkbox.type = "checkbox"
+    checkbox.className = "column-practice-checkbox"
+    checkbox.style.width = "18px"
+    checkbox.style.height = "18px"
+    checkbox.style.cursor = "pointer"
+    checkbox.style.accentColor = "var(--accent)"
+    
+    const colKey = `${prefix}-${column.id}`
+    checkbox.checked = state.selectedColumns.has(colKey)
+    
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) {
+        state.selectedColumns.add(colKey)
+      } else {
+        state.selectedColumns.delete(colKey)
+      }
+      startSession({ keepStats: true })
+    })
+
+    cell.appendChild(checkbox)
+    checkRow.appendChild(cell)
+  })
+
+  tableWrapper.appendChild(checkRow)
+  // -------------------------
+
   const header = document.createElement("div")
   header.className = "table-row table-header"
   header.style.gridTemplateColumns = `68px repeat(${colCount}, minmax(42px, 1fr))`
@@ -435,6 +492,12 @@ function renderSubTable(title, rows, columns, kanaList, index) {
     button.textContent = displayColumnLabel(column)
     button.setAttribute("aria-label", `播放${displayColumnLabel(column)}`)
     button.addEventListener("click", () => playColumn(column.id, columns, kanaList))
+    
+    const colKey = `${prefix}-${column.id}`
+    if (!state.selectedColumns.has(colKey)) {
+      button.style.opacity = "0.5"
+    }
+    
     header.appendChild(button)
   })
 
@@ -453,11 +516,14 @@ function renderSubTable(title, rows, columns, kanaList, index) {
     rowButton.addEventListener("click", () => playRow(row.id, kanaList))
     rowElement.appendChild(rowButton)
 
-    row.kana.forEach((kana) => {
+    row.kana.forEach((kana, columnIndex) => {
       const cellElement = document.createElement("button")
       cellElement.type = "button"
       cellElement.className = "kana-cell"
       const kanaItem = kanaList.find((item) => item.kana === kana)
+
+      const colKey = `${prefix}-${columns[columnIndex].id}`
+      const isColSelected = state.selectedColumns.has(colKey)
 
       if (kana && kanaItem) {
         cellElement.textContent = displayKana(kanaItem)
@@ -466,6 +532,10 @@ function renderSubTable(title, rows, columns, kanaList, index) {
         
         if (state.current && state.current.kana === kana) {
           cellElement.classList.add("is-current")
+        }
+
+        if (!isColSelected) {
+          cellElement.style.opacity = "0.3"
         }
       } else {
         cellElement.textContent = ""
@@ -486,9 +556,9 @@ function renderSubTable(title, rows, columns, kanaList, index) {
 function renderTable() {
   elements.kanaTable.innerHTML = ""
 
-  renderSubTable("清音", gojuonRows, gojuonColumns, gojuonKana, 0)
-  renderSubTable("浊音 / 半浊音", dakuonRows, dakuonColumns, dakuonKana, 1)
-  renderSubTable("拗音", yoonRows, yoonColumns, yoonKana, 2)
+  renderSubTable("清音", gojuonRows, gojuonColumns, gojuonKana, "gojuon", 0)
+  renderSubTable("浊音 / 半浊音", dakuonRows, dakuonColumns, dakuonKana, "dakuon", 1)
+  renderSubTable("拗音", yoonRows, yoonColumns, yoonKana, "yoon", 2)
 }
 
 function setFeedback(text, type = "") {
@@ -500,7 +570,7 @@ function renderCard() {
   renderScriptButtons()
   renderSections()
   elements.scopeLabel.textContent = getScopeLabel()
-  elements.progressText.textContent = `${state.deckIndex + 1} / ${state.deck.length}`
+  elements.progressText.textContent = state.deck.length > 0 ? `${state.deckIndex + 1} / ${state.deck.length}` : "0 / 0"
 
   const labelElement = document.getElementById("promptLabel")
   if (state.qtype === "kana-to-romaji") {
@@ -566,7 +636,30 @@ function setCard(deckIndex) {
 function startSession(options = {}) {
   clearAutoNextTimer()
   state.activeFilter = state.activeFilter || getDefaultFilter(state.mode)
-  state.deck = shuffle(getActiveKana())
+  
+  const activeKana = getActiveKana()
+  if (activeKana.length === 0) {
+    state.deck = []
+    state.deckIndex = 0
+    state.current = null
+    state.options = []
+    state.completed = false
+    state.selectedKana = ""
+    state.wrongSelections = new Set()
+    
+    if (!options.keepStats) {
+      state.stats = {
+        answered: 0,
+        correct: 0
+      }
+    }
+    
+    setFeedback("请先在五十音图中勾选要练习的列", "notice")
+    renderCard()
+    return
+  }
+
+  state.deck = shuffle(activeKana)
 
   if (!options.keepStats) {
     state.stats = {
